@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.springbootdeveloper.domain.Article;
 import org.example.springbootdeveloper.dto.AddArticleRequest;
 import org.example.springbootdeveloper.dto.ArticleResponse;
+import org.example.springbootdeveloper.dto.UpdateArticleRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,31 @@ public class BlogApiController {
         return ResponseEntity.ok()
                 .body(articles);
     }
+
+    @GetMapping("/api/articles/{id}")
+    public ResponseEntity<ArticleResponse> findArticle(@PathVariable long id){
+        Article article = blogService.findById(id);
+
+        return ResponseEntity.ok()
+                .body(new ArticleResponse(article));
+    }
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable long id){
+        blogService.deete(id);
+
+        return ResponseEntity.ok()
+                .build();
+    }
+
+    @PutMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable long id, @RequestBody UpdateArticleRequest request){
+        Article updateArticle = blogService.update(id, request);
+
+        return ResponseEntity.ok()
+                .body(updateArticle);
+    }
+
 
 
 }
