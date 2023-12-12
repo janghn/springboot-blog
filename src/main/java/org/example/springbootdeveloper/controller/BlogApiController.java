@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.example.springbootdeveloper.service.BlogService;
 
+import java.security.Principal;
 import java.util.List;
 
 
@@ -26,8 +27,8 @@ public class BlogApiController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request){
-        Article savedArticle = blogService.save(request);
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal){
+        Article savedArticle = blogService.save(request, principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(savedArticle);
@@ -54,7 +55,7 @@ public class BlogApiController {
 
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable long id){
-        blogService.deete(id);
+        blogService.delete(id);
 
         return ResponseEntity.ok()
                 .build();
